@@ -104,6 +104,7 @@ export interface MainSettings {
   trustProxy: boolean;
   partialRequestsEnabled: boolean;
   locale: string;
+  bannerMessage: string;
 }
 
 interface PublicSettings {
@@ -301,6 +302,7 @@ class Settings {
         trustProxy: false,
         partialRequestsEnabled: true,
         locale: 'en',
+        bannerMessage: '',
       },
       plex: {
         name: '',

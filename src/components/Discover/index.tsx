@@ -22,11 +22,13 @@ import {
   ArrowDownOnSquareIcon,
   ArrowPathIcon,
   ArrowUturnLeftIcon,
+  InformationCircleIcon,
   PencilIcon,
   PlusIcon,
 } from '@heroicons/react/24/solid';
 import { DiscoverSliderType } from '@server/constants/discover';
 import type DiscoverSlider from '@server/entity/DiscoverSlider';
+import type { MainSettings } from '@server/lib/settings';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -62,7 +64,10 @@ const Discover = () => {
   } = useSWR<DiscoverSlider[]>('/api/v1/settings/discover');
   const [sliders, setSliders] = useState<Partial<DiscoverSlider>[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-
+  const { data: mainSettings, error: mainSettingsError } = useSWR<MainSettings>(
+    '/api/v1/settings/main'
+  ); // Remplacez ceci par la méthode réelle pour obtenir le message
+  const bannerMessage = mainSettings?.bannerMessage;
   // We need to sync the state here so that we can modify the changes locally without commiting
   // anything to the server until the user decides to save the changes
   useEffect(() => {
@@ -115,13 +120,25 @@ const Discover = () => {
     .toISOString()
     .split('T')[0];
 
-  if (!discoverData && !discoverError) {
+  if (!discoverData && !discoverError && !mainSettings && !mainSettingsError) {
     return <LoadingSpinner />;
   }
 
   return (
     <>
       <PageTitle title={intl.formatMessage(messages.discover)} />
+      {bannerMessage && (
+        <div className="mt-6 rounded-md border border-indigo-500 bg-indigo-400 bg-opacity-20 p-4 backdrop-blur">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <InformationCircleIcon className="h-5 w-5 text-gray-100" />
+            </div>
+            <div className="ml-3 flex-1 md:flex md:justify-between">
+              <p className="text-sm leading-5 text-gray-100">{bannerMessage}</p>
+            </div>
+          </div>
+        </div>
+      )}
       {hasPermission(Permission.ADMIN) && (
         <>
           {isEditing && (

@@ -134,6 +134,7 @@ const SettingsMain = () => {
             partialRequestsEnabled: data?.partialRequestsEnabled,
             trustProxy: data?.trustProxy,
             cacheImages: data?.cacheImages,
+            bannerMessage: data?.bannerMessage,
           }}
           enableReinitialize
           validationSchema={MainSettingsSchema}
@@ -150,6 +151,7 @@ const SettingsMain = () => {
                 partialRequestsEnabled: values.partialRequestsEnabled,
                 trustProxy: values.trustProxy,
                 cacheImages: values.cacheImages,
+                bannerMessage: values.bannerMessage,
               });
               mutate('/api/v1/settings/public');
               mutate('/api/v1/status');
@@ -425,6 +427,23 @@ const SettingsMain = () => {
                         );
                       }}
                     />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <label htmlFor="bannerMessage" className="text-label">
+                    <span>Banner Message</span>
+                    <span className="label-tip">
+                      Message to display on the homepage
+                    </span>
+                  </label>
+                  <div className="form-input-area">
+                    <div className="form-input-field">
+                      <Field
+                        id="bannerMessage"
+                        name="bannerMessage"
+                        type="text"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="actions">
